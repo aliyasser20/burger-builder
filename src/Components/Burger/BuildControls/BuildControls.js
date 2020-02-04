@@ -28,6 +28,7 @@ const buildControls = props => (
       disabled={!props.purchasable}
       className="order-button"
       type="button"
+      onClick={props.purchase}
     >
       ORDER NOW
     </button>
@@ -39,7 +40,8 @@ buildControls.propTypes = {
   ingredientAdded: PropTypes.func,
   ingredientRemoved: PropTypes.func,
   disabled: PropTypes.object,
-  purchasable: PropTypes.bool
+  purchasable: PropTypes.bool,
+  purchase: PropTypes.func
 };
 
 export default buildControls;
