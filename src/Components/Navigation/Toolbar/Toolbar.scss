@@ -11,7 +11,17 @@
   padding: 0 20px;
   z-index: 90;
 
+  .logo-wrapper {
+    height: 70%;
+  }
+
   nav {
     height: 100%;
+  }
+
+  @media (max-width: 499px) {
+    .desktop-only {
+      display: none;
+    }
   }
 }

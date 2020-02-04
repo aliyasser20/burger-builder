@@ -3,16 +3,22 @@ import PropTypes from "prop-types";
 import "./Modal.scss";
 import Backdrop from "../Backdrop/Backdrop";
 
-const Modal = props => {
-  const classes = `modal ${props.show ? "open" : "closed"}`;
+class Modal extends React.Component {
+  shouldComponentUpdate(nextProps) {
+    return nextProps.show !== this.props.show;
+  }
 
-  return (
-    <Fragment>
-      <Backdrop show={props.show} hide={props.hide} />
-      <div className={classes}>{props.children}</div>
-    </Fragment>
-  );
-};
+  render() {
+    const classes = `modal ${this.props.show ? "open" : "closed"}`;
+
+    return (
+      <Fragment>
+        <Backdrop show={this.props.show} hide={this.props.hide} />
+        <div className={classes}>{this.props.children}</div>
+      </Fragment>
+    );
+  }
+}
 
 Modal.propTypes = {
   children: PropTypes.element,

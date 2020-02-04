@@ -1,13 +1,24 @@
 import React from "react";
+import PropTypes from "prop-types";
+import NavigationItems from "../NavigationItems/NavigationItems";
 import Logo from "../../Logo/Logo";
+import MenuButton from "../MenuButton/MenuButton";
 import "./Toolbar.scss";
 
-const toolbar = () => (
+const toolbar = props => (
   <header className="toolbar">
-    <div>MENU</div>
-    <Logo />
-    <nav>...</nav>
+    <MenuButton toggle={props.toggle} />
+    <div className="logo-wrapper">
+      <Logo />
+    </div>
+    <nav className="desktop-only">
+      <NavigationItems />
+    </nav>
   </header>
 );
+
+toolbar.propTypes = {
+  toggle: PropTypes.func
+};
 
 export default toolbar;
