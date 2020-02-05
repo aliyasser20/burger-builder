@@ -25,5 +25,5 @@ yarn-error.log*
 #forMe
 /forMe
 
-#vscode
+#.vscode
 /.vscode
