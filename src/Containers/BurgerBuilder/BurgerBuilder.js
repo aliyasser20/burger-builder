@@ -1,4 +1,5 @@
 import React, { Fragment } from "react";
+import PropTypes from "prop-types";
 import Burger from "../../Components/Burger/Burger";
 import BuildControls from "../../Components/Burger/BuildControls/BuildControls";
 import Modal from "../../Components/UI/Modal/Modal";
@@ -92,33 +93,25 @@ class BurgerBuilder extends React.Component {
   };
 
   purchaseContinueHandler = () => {
-    const order = {
-      ingredients: this.state.ingredients,
-      price: this.state.totalPrice,
-      customer: {
-        name: "Ali Sayed",
-        address: "Ottawa"
-      },
-      email: "test@test.com",
-      deliveryMethod: "fastest"
-    };
+    const queryParams = [];
 
-    this.setState({ loading: true });
+    /* eslint-disable */
+    for (const i in this.state.ingredients) {
+      queryParams.push(
+        `${encodeURIComponent(i)}=${encodeURIComponent(
+          this.state.ingredients[i]
+        )}`
+      );
+    }
+    /* eslint-enable */
 
-    axios
-      .post("/orders.json", order)
-      .then(response => {
-        this.setState({
-          loading: false,
-          purchasing: false
-        });
-      })
-      .catch(error => {
-        this.setState({
-          loading: false,
-          purchasing: false
-        });
-      });
+    queryParams.push(`price=${this.state.totalPrice}`);
+    const queryString = queryParams.join("&");
+
+    this.props.history.push({
+      pathname: "/checkout",
+      search: `?${queryString}`
+    });
   };
 
   render() {
@@ -173,5 +166,9 @@ class BurgerBuilder extends React.Component {
     );
   }
 }
+
+BurgerBuilder.propTypes = {
+  history: PropTypes.object
+};
 
 export default withErrorHandler(BurgerBuilder, axios);
