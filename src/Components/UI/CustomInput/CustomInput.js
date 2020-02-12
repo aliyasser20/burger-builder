@@ -1,14 +1,20 @@
 import React from "react";
+import PropTypes from "prop-types";
 import "./CustomInput.scss";
 
 const customInput = props => {
   let inputElement;
 
+  const classes = `input-element ${
+    !props.valid && props.touched ? "invalid" : null
+  }`;
+
   switch (props.elementType) {
     case "input":
       inputElement = (
         <input
-          className="input-element"
+          onChange={props.change}
+          className={classes}
           {...props.elementConfig}
           value={props.value}
         />
@@ -17,7 +23,8 @@ const customInput = props => {
     case "textarea":
       inputElement = (
         <textarea
-          className="input-element"
+          onChange={props.change}
+          className={classes}
           {...props.elementConfig}
           value={props.value}
         />
@@ -25,7 +32,11 @@ const customInput = props => {
       break;
     case "select":
       inputElement = (
-        <select className="input-element" value={props.value}>
+        <select
+          onChange={props.change}
+          className="input-element"
+          value={props.value}
+        >
           {props.elementConfig.options.map(option => (
             <option key={option.value} value={option.value}>
               {option.displayValue}
@@ -44,6 +55,16 @@ const customInput = props => {
       {inputElement}
     </div>
   );
+};
+
+customInput.propTypes = {
+  label: PropTypes.string,
+  elementConfig: PropTypes.object,
+  value: PropTypes.string,
+  change: PropTypes.func,
+  elementType: PropTypes.string,
+  valid: PropTypes.bool,
+  touched: PropTypes.bool
 };
 
 export default customInput;

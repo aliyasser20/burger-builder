@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import axios from "../../../axios-orders";
 import CustomButton from "../../../Components/UI/CustomButton/CustomButton";
 import Spinner from "../../../Components/UI/Spinner/Spinner";
@@ -14,7 +15,12 @@ class ContactData extends React.Component {
           type: "text",
           placeholder: "Your Name"
         },
-        value: ""
+        value: "",
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       street: {
         elementType: "input",
@@ -22,7 +28,12 @@ class ContactData extends React.Component {
           type: "text",
           placeholder: "Street"
         },
-        value: ""
+        value: "",
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       postalCode: {
         elementType: "input",
@@ -30,7 +41,13 @@ class ContactData extends React.Component {
           type: "text",
           placeholder: "Postal Code"
         },
-        value: ""
+        value: "",
+        validation: {
+          required: true,
+          minLength: 6
+        },
+        valid: false,
+        touched: false
       },
       country: {
         elementType: "input",
@@ -38,7 +55,12 @@ class ContactData extends React.Component {
           type: "text",
           placeholder: "Country"
         },
-        value: ""
+        value: "",
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       email: {
         elementType: "input",
@@ -46,7 +68,12 @@ class ContactData extends React.Component {
           type: "email",
           placeholder: "Email"
         },
-        value: ""
+        value: "",
+        validation: {
+          required: true
+        },
+        valid: false,
+        touched: false
       },
       deliveryMethod: {
         elementType: "select",
@@ -59,16 +86,25 @@ class ContactData extends React.Component {
         value: ""
       }
     },
-    loading: false
+    loading: false,
+    formValid: false
   };
 
   orderHandler = e => {
     e.preventDefault();
 
     console.log("fired");
+    const formData = {};
+
+    // eslint-disable-next-line
+    for (const key in this.state.orderForm) {
+      formData[key] = this.state.orderForm[key].value;
+    }
+
     const order = {
       ingredients: this.props.ingredients,
-      price: this.props.price
+      price: this.props.price,
+      orderData: formData
     };
     this.setState({ loading: true });
     axios
@@ -86,6 +122,49 @@ class ContactData extends React.Component {
       });
   };
 
+  inputChangedHandler = (e, inputIdentifier) => {
+    const updatedOrderForm = { ...this.state.orderForm };
+    const updatedFormElement = { ...updatedOrderForm[inputIdentifier] };
+
+    updatedFormElement.value = e.target.value;
+
+    if (updatedFormElement.valid !== undefined) {
+      updatedFormElement.valid = this.checkValidity(
+        updatedFormElement.value,
+        updatedFormElement.validation
+      );
+    }
+    updatedOrderForm[inputIdentifier] = updatedFormElement;
+    updatedFormElement.touched = true;
+
+    let formValid = false;
+    // eslint-disable-next-line
+    for (let key in updatedOrderForm) {
+      if (updatedOrderForm[key].valid !== undefined) {
+        formValid = updatedOrderForm[key].valid;
+      }
+    }
+
+    this.setState({
+      orderForm: updatedOrderForm,
+      formValid
+    });
+  };
+
+  checkValidity = (value, rules) => {
+    let isValid;
+
+    if (rules.required) {
+      isValid = value.trim() !== "";
+    }
+
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength;
+    }
+
+    return isValid;
+  };
+
   render() {
     const formElementsArray = [];
 
@@ -97,24 +176,29 @@ class ContactData extends React.Component {
       });
     }
 
-    console.log(formElementsArray);
-
     return (
       <div className="contact-data">
         <h4>Enter your contact information</h4>
         {this.state.loading ? (
           <Spinner />
         ) : (
-          <form action="">
+          <form onSubmit={this.orderHandler}>
             {formElementsArray.map(formElement => (
               <CustomInput
                 key={formElement.id}
                 elementType={formElement.config.elementType}
                 elementConfig={formElement.config.elementConfig}
                 value={formElement.config.value}
+                change={e => this.inputChangedHandler(e, formElement.id)}
+                valid={formElement.config.valid}
+                touched={formElement.config.touched}
               />
             ))}
-            <CustomButton btnType="success" clicked={this.orderHandler}>
+            <CustomButton
+              type="submit"
+              disabled={!this.state.formValid}
+              btnType="success"
+            >
               ORDER
             </CustomButton>
           </form>
@@ -124,4 +208,9 @@ class ContactData extends React.Component {
   }
 }
 
+ContactData.propTypes = {
+  ingredients: PropTypes.object,
+  price: PropTypes.string,
+  history: PropTypes.object
+};
 export default ContactData;
