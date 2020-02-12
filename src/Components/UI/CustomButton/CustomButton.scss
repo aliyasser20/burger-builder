@@ -22,3 +22,8 @@
 .custom-button.danger {
   color: #944317;
 }
+
+.custom-button:disabled {
+  color: #ccc;
+  cursor: not-allowed;
+}
