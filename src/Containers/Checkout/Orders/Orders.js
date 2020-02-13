@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "../../../axios-orders";
+
 import Order from "../../../Components/Order/Order";
 import withErrorHandler from "../../../HOC/withErrorHandler/withErrorHandler";
 
@@ -20,7 +21,6 @@ class Orders extends React.Component {
         for (const key in response.data) {
           ordersArray.push({ id: key, ...response.data[key] });
         }
-        console.log(ordersArray);
 
         this.setState({
           orders: ordersArray,
@@ -41,7 +41,7 @@ class Orders extends React.Component {
           <Order
             deliveryMethod={order.deliveryMethod}
             customer={order.customer}
-            price={order.price}
+            price={Number(order.price)}
             ingredients={order.ingredients}
             key={order.id}
           ></Order>
