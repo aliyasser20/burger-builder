@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import axios from "../../../axios-orders";
+
 import CustomButton from "../../../Components/UI/CustomButton/CustomButton";
 import Spinner from "../../../Components/UI/Spinner/Spinner";
 import "./ContactData.scss";
@@ -83,7 +85,7 @@ class ContactData extends React.Component {
             { value: "cheapest", displayValue: "Cheapest" }
           ]
         },
-        value: ""
+        value: "fastest"
       }
     },
     loading: false,
@@ -102,10 +104,11 @@ class ContactData extends React.Component {
     }
 
     const order = {
-      ingredients: this.props.ingredients,
+      ingredients: this.props.ings,
       price: this.props.price,
       orderData: formData
     };
+
     this.setState({ loading: true });
     axios
       .post("/orders.json", order)
@@ -209,8 +212,14 @@ class ContactData extends React.Component {
 }
 
 ContactData.propTypes = {
-  ingredients: PropTypes.object,
-  price: PropTypes.string,
+  ings: PropTypes.object,
+  price: PropTypes.number,
   history: PropTypes.object
 };
-export default ContactData;
+
+const mapStateToProps = state => ({
+  ings: state.ingredients,
+  price: state.totalPrice
+});
+
+export default connect(mapStateToProps)(ContactData);
