@@ -19,8 +19,13 @@ class Checkout extends React.Component {
     let summary = <Redirect to="/" />;
 
     if (this.props.ings) {
+      const purchasedRedirect = this.props.purchased ? (
+        <Redirect to="/" />
+      ) : null;
+
       summary = (
         <div>
+          {purchasedRedirect}
           <CheckoutSummary
             onCheckoutCancelled={this.onCheckoutCancelledHandler}
             onCheckoutContinue={this.onCheckoutContinueHandler}
@@ -40,11 +45,13 @@ class Checkout extends React.Component {
 Checkout.propTypes = {
   history: PropTypes.object,
   match: PropTypes.object,
-  ings: PropTypes.object
+  ings: PropTypes.object,
+  purchased: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
-  ings: state.burgerBuilder.ingredients
+  ings: state.burgerBuilder.ingredients,
+  purchased: state.order.purchased
 });
 
 export default connect(mapStateToProps)(Checkout);

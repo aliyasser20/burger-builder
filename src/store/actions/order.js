@@ -27,3 +27,40 @@ export const purchaseBurger = orderData => dispatch => {
       dispatch(purchaseBurgerFail(error));
     });
 };
+
+export const purchaseInit = () => ({
+  type: actionTypes.PURCHASE_INIT
+});
+
+export const fetchOrdersSuccess = orders => ({
+  type: actionTypes.FETCH_ORDERS_SUCCESS,
+  orders
+});
+
+export const fetchOrdersFail = error => ({
+  type: actionTypes.FETCH_ORDERS_FAIL,
+  error
+});
+
+export const fetchOrdersStart = () => ({
+  type: actionTypes.FETCH_ORDERS_START
+});
+
+export const fetchOrders = () => dispatch => {
+  dispatch(fetchOrdersStart());
+  axios
+    .get("/orders.json")
+    .then(response => {
+      const ordersArray = [];
+
+      // eslint-disable-next-line
+        for (const key in response.data) {
+        ordersArray.push({ id: key, ...response.data[key] });
+      }
+
+      dispatch(fetchOrdersSuccess(ordersArray));
+    })
+    .catch(error => {
+      dispatch(fetchOrdersFail(error));
+    });
+};
