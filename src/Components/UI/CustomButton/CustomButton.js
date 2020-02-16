@@ -20,7 +20,6 @@ const customButton = props => {
 
 customButton.propTypes = {
   clicked: PropTypes.func,
-  children: PropTypes.string,
   btnType: PropTypes.string,
   type: PropTypes.string,
   disabled: PropTypes.bool
