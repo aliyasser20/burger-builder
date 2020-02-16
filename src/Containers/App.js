@@ -4,6 +4,7 @@ import Layout from "../HOC/Layout/Layout";
 import BurgerBuilder from "./BurgerBuilder/BurgerBuilder";
 import Checkout from "./Checkout/Checkout";
 import Orders from "./Checkout/Orders/Orders";
+import Auth from "./Auth/Auth";
 
 class App extends React.Component {
   render() {
@@ -11,6 +12,7 @@ class App extends React.Component {
       <Layout>
         <Switch>
           <Route path="/checkout" component={Checkout} />
+          <Route path="/auth" component={Auth} />
           <Route path="/orders" component={Orders} />
           <Route path="/" component={BurgerBuilder} />
         </Switch>
