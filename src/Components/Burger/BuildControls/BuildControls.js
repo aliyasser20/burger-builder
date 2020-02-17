@@ -30,7 +30,7 @@ const buildControls = props => (
       type="button"
       onClick={props.purchase}
     >
-      ORDER NOW
+      {props.token ? "ORDER NOW" : "SIGNUP TO ORDER"}
     </button>
   </div>
 );
@@ -41,7 +41,8 @@ buildControls.propTypes = {
   ingredientRemoved: PropTypes.func,
   disabled: PropTypes.object,
   purchasable: PropTypes.bool,
-  purchase: PropTypes.func
+  purchase: PropTypes.func,
+  token: PropTypes.string
 };
 
 export default buildControls;

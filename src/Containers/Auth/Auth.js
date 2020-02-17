@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import { Redirect } from "react-router-dom";
 import * as actions from "../../store/actions/index";
 
 import CustomInput from "../../Components/UI/CustomInput/CustomInput";
@@ -43,6 +44,12 @@ class Auth extends React.Component {
     },
     isSignup: true
   };
+
+  componentDidMount() {
+    if (!this.props.buildingBurger && this.props.authRedirectPath !== "/") {
+      this.props.onSetAuthRedirectPath();
+    }
+  }
 
   checkValidity = (value, rules) => {
     let isValid;
@@ -129,7 +136,9 @@ class Auth extends React.Component {
       </form>
     );
 
-    return (
+    return this.props.token ? (
+      <Redirect to={this.props.authRedirectPath} />
+    ) : (
       <div className="auth">
         {errorMessage}
         {authForm}
@@ -140,17 +149,26 @@ class Auth extends React.Component {
 
 Auth.propTypes = {
   onAuth: PropTypes.func,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  token: PropTypes.string,
+  error: PropTypes.object,
+  buildingBurger: PropTypes.bool,
+  authRedirectPath: PropTypes.string,
+  onSetAuthRedirectPath: PropTypes.func
 };
 
 const mapStateToProps = state => ({
   loading: state.auth.loading,
-  error: state.auth.error
+  error: state.auth.error,
+  token: state.auth.token,
+  buildingBurger: state.burgerBuilder.building,
+  authRedirectPath: state.auth.authRedirectPath
 });
 
 const mapDispatchToProps = dispatch => ({
   onAuth: (email, password, isSignup) =>
-    dispatch(actions.auth(email, password, isSignup))
+    dispatch(actions.auth(email, password, isSignup)),
+  onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath("/"))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Auth);

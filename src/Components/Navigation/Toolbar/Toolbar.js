@@ -12,13 +12,14 @@ const toolbar = props => (
       <Logo />
     </div>
     <nav className="desktop-only">
-      <NavigationItems />
+      <NavigationItems token={props.token} />
     </nav>
   </header>
 );
 
 toolbar.propTypes = {
-  toggle: PropTypes.func
+  toggle: PropTypes.func,
+  token: PropTypes.string
 };
 
 export default toolbar;
