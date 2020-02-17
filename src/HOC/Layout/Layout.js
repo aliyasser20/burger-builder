@@ -1,5 +1,6 @@
 import React, { Fragment } from "react";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
 import "./Layout.scss";
 import Toolbar from "../../Components/Navigation/Toolbar/Toolbar";
 import SideDrawer from "../../Components/Navigation/SideDrawer/SideDrawer";
@@ -18,8 +19,12 @@ class Layout extends React.Component {
   render() {
     return (
       <Fragment>
-        <Toolbar toggle={this.sideDrawerToggleHandler} />
+        <Toolbar
+          token={this.props.token}
+          toggle={this.sideDrawerToggleHandler}
+        />
         <SideDrawer
+          token={this.props.token}
           show={this.state.showSideDrawer}
           toggle={this.sideDrawerToggleHandler}
         />
@@ -30,7 +35,12 @@ class Layout extends React.Component {
 }
 
 Layout.propTypes = {
-  children: PropTypes.element
+  children: PropTypes.element,
+  token: PropTypes.string
 };
 
-export default Layout;
+const mapStateToProps = state => ({
+  token: state.auth.token
+});
+
+export default connect(mapStateToProps)(Layout);

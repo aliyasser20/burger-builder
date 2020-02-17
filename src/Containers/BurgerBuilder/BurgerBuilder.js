@@ -27,7 +27,12 @@ class BurgerBuilder extends React.Component {
   };
 
   purchaseHandler = () => {
-    this.setState(prevState => ({ purchasing: !prevState.purchasing }));
+    if (this.props.token) {
+      this.setState(prevState => ({ purchasing: !prevState.purchasing }));
+    } else {
+      this.props.onSetAuthRedirectPath("/checkout");
+      this.props.history.push("/auth");
+    }
   };
 
   purchaseContinueHandler = () => {
@@ -78,6 +83,7 @@ class BurgerBuilder extends React.Component {
               price={this.props.price.toFixed(2)}
               purchasable={this.updatePurchaseState(this.props.ings)}
               purchase={this.purchaseHandler}
+              token={this.props.token}
             />
           </Fragment>
         ) : (
@@ -96,20 +102,24 @@ BurgerBuilder.propTypes = {
   onIngredientAdded: PropTypes.func,
   onIngredientRemoved: PropTypes.func,
   onInitIngredients: PropTypes.func,
-  onInitPurchase: PropTypes.func
+  onInitPurchase: PropTypes.func,
+  token: PropTypes.string,
+  onSetAuthRedirectPath: PropTypes.func
 };
 
 const mapStateToProps = state => ({
   ings: state.burgerBuilder.ingredients,
   price: state.burgerBuilder.totalPrice,
-  error: state.burgerBuilder.error
+  error: state.burgerBuilder.error,
+  token: state.auth.token
 });
 
 const mapDispatchToProps = dispatch => ({
   onIngredientAdded: ingName => dispatch(actions.addIngredient(ingName)),
   onIngredientRemoved: ingName => dispatch(actions.removeIngredient(ingName)),
   onInitIngredients: () => dispatch(actions.initIngredients()),
-  onInitPurchase: () => dispatch(actions.purchaseInit())
+  onInitPurchase: () => dispatch(actions.purchaseInit()),
+  onSetAuthRedirectPath: path => dispatch(actions.setAuthRedirectPath(path))
 });
 
 export default connect(

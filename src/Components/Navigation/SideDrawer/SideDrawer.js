@@ -16,7 +16,7 @@ const sideDrawer = props => {
           <Logo />
         </div>
         <nav>
-          <NavigationItems />
+          <NavigationItems token={props.token} />
         </nav>
       </div>
     </Fragment>
@@ -25,7 +25,8 @@ const sideDrawer = props => {
 
 sideDrawer.propTypes = {
   toggle: PropTypes.func,
-  show: PropTypes.bool
+  show: PropTypes.bool,
+  token: PropTypes.string
 };
 
 export default sideDrawer;
