@@ -11,7 +11,7 @@ const sideDrawer = props => {
   return (
     <Fragment>
       <Backdrop show={props.show} hide={props.toggle} />
-      <div className={classes}>
+      <div className={classes} onClick={props.toggle}>
         <div className="logo-wrapper">
           <Logo />
         </div>
