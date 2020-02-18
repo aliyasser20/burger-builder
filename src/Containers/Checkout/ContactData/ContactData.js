@@ -96,7 +96,7 @@ class ContactData extends React.Component {
   orderHandler = e => {
     e.preventDefault();
 
-    console.log("fired");
+    // console.log("fired");
     const formData = {};
 
     // eslint-disable-next-line
